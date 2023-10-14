@@ -18,4 +18,6 @@ RUN dotnet publish "megacal.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN useradd user
+USER user
 ENTRYPOINT ["dotnet", "megacal.dll"]
