@@ -1,0 +1,39 @@
+name: 'Build'
+
+on:
+  push:
+  pull_request:
+    types:
+      - reopened
+      - ready_for_review
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Build the Docker image
+      run: docker build -t megacal .
+
+    - name: Run the application with Docker
+      run: docker run -d --name megacal -p 80:80 megacal:latest
+
+    - name: Wait for container to start
+      run: sleep 10
+
+    - name: Send test query to the application
+      run: |
+        expected_response='{"result":75}'
+        actual_response=$(curl -X POST -H "Content-Type:application/json" -d '{"a":15, "b":5}' http://localhost/api/multiply)
+        if [[ "$actual_response" == *"$expected_response"* ]]; then
+          echo "Success"
+        else
+          echo "Failture"
+          exit 1
+        fi
+
