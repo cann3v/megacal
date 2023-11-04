@@ -1,0 +1,26 @@
+@model Home
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML form</title>
+</head>
+<body>
+    <h1>Page for reading notes</h1>
+
+    <form action="/" method="get">
+        <label for="name">File name:</label>
+        <input type="text" id="name" name="name"><br><br>
+
+        <input type="submit" value="Read">
+    </form>
+
+    @if(Model != null)
+    {
+        <p><b>Contents of the note @Model.FileName:</b></p>
+        <p>@Model.Result</p>
+    }
+
+</body>
+</html>
