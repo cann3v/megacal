@@ -21,4 +21,4 @@ jobs:
         tar -xvzf trivy_0.46.1_Linux-64bit.tar.gz
 
     - name: Run trivy
-      run: trivy fs --exit-code 1 .
+      run: ./trivy fs --exit-code 1 .
