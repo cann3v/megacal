@@ -12,6 +12,9 @@ jobs:
   semgrep:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
     - name: Install semgrep
       run: sudo apt install python3-pip && pip install semgrep
 
