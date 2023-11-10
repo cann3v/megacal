@@ -1,0 +1,24 @@
+name: 'sast-trivy'
+
+on:
+  push:
+  pull_request:
+    types:
+      - reopened
+      - ready_for_review
+  workflow_dispatch:
+
+jobs:
+  semgrep:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install trivy
+      run: |
+        wget https://github.com/aquasecurity/trivy/releases/download/v0.46.1/trivy_0.46.1_Linux-64bit.tar.gz
+        tar -xvzf trivy_0.46.1_Linux-64bit.tar.gz
+
+    - name: Run trivy
+      run: trivy fs --exit-code 1 .
