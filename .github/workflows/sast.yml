@@ -1,0 +1,29 @@
+name: 'sast-semgrep'
+
+on:
+  push:
+  pull_request:
+    types:
+      - reopened
+      - ready_for_review
+  workflow_dispatch:
+
+jobs:
+  semgrep:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install semgrep
+      run: apt install python3-pip && pip install semgrep
+
+    - name: Run semgrep
+      run: result=$(semgrep --config=auto --gitlab-sast .)
+
+    - name: Check semgrep output
+      run: |
+        if [[ "$result" == *"\"vulnerabilities\": []"* ]]; then
+          echo "Not found any vulnerabilities"
+        else
+          echo "Found vulnerabilities"
+          echo $result
+          exit 1
+        fi
